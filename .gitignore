@@ -1,0 +1,25 @@
+# colcon/CMake generated output
+/build/
+/install/
+/log/
+
+# Runtime test output
+/logs/*
+!/logs/.gitkeep
+
+# Editor, Python, and OS caches
+.vscode/
+.idea/
+__pycache__/
+*.py[cod]
+*.swp
+*~
+.DS_Store
+
+# Native build artifacts and crash dumps
+*.o
+*.a
+*.so
+*.so.*
+core
+core.*

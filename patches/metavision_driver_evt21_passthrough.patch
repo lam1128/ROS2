@@ -1,0 +1,22 @@
+--- a/src/driver_ros2.cpp
++++ b/src/driver_ros2.cpp
+@@ -37,9 +37,17 @@ DriverROS2::DriverROS2(const rclcpp::NodeOptions & options)
+   configureWrapper(get_name());
+ 
+   this->get_parameter_or("encoding", encoding_, std::string("evt3"));
+-  if (encoding_ != "evt3") {  // Other encodings have no support yet from event_camera_codecs.
++  const bool is_evt3 = encoding_ == "evt3";
++  const bool is_evt21 =
++    encoding_ == "evt21" || encoding_.rfind("evt21;", 0) == 0;
++  if (!is_evt3 && !is_evt21) {
+     LOG_ERROR("unsupported encoding: " << encoding_);
+     throw std::runtime_error("invalid encoding!");
+   }
++  if (is_evt21) {
++    LOG_WARN(
++      "EVT21 is enabled for raw EventPacket transport only; "
++      "event_camera_codecs does not currently decode EVT21");
++  }
+   double mtt;
+   this->get_parameter_or("event_message_time_threshold", mtt, 1e-3);
+   messageThresholdTime_ = uint64_t(std::abs(mtt) * 1e9);
