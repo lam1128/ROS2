@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>jetson_event_receiver</name>
+  <version>0.1.0</version>
+  <description>Bounded C++ receiver and health monitor for Kria EventPacket data.</description>
+  <maintainer email="hybridneuroperception@example.invalid">HybridNeuroPerception</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclcpp</depend>
+  <depend>event_camera_msgs</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

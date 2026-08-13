@@ -1,22 +1,26 @@
-# colcon/CMake generated output
+# Generated build/runtime artifacts; build separately on Kria and Jetson.
 /build/
 /install/
 /log/
+/logs/
+*.pyc
+__pycache__/
 
-# Runtime test output
-/logs/*
-!/logs/.gitkeep
+# Local synchronization staging area; never commit it.
+/_incoming/
 
-# Editor, Python, and OS caches
+# Local isolated cross-build outputs and downloaded archives.
+/data/
+
+# Editor, Python, and OS caches.
 .vscode/
 .idea/
-__pycache__/
 *.py[cod]
 *.swp
 *~
 .DS_Store
 
-# Native build artifacts and crash dumps
+# Native build artifacts and crash dumps.
 *.o
 *.a
 *.so
