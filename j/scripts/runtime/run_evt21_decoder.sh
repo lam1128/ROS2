@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -eo pipefail
-cd /home/anavs/ROS2
+ROS2_WS=/home/anavs/ROS2/j
+cd "$ROS2_WS"
 . /opt/ros/humble/setup.bash
 . install/setup.bash
 export ROS_DOMAIN_ID=42 RMW_IMPLEMENTATION=rmw_fastrtps_cpp ROS_LOCALHOST_ONLY=0

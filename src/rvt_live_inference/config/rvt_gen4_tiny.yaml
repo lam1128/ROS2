@@ -1,9 +1,0 @@
-rvt_root: "/home/anavs/jetson-containers/data/RVT"
-checkpoint: "/home/anavs/jetson-containers/data/RVT/checkpoints/rvt-t-gen4.ckpt"
-device: "cuda"
-input_topic: "/metavision_driver/events_decoded"
-detection_topic: "/rvt/detections"
-visualization_topic: "/rvt/visualization"
-window_ms: 50.0
-confidence_threshold: 0.1
-nms_threshold: 0.45

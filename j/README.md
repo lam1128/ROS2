@@ -1,13 +1,14 @@
-# Jetson bundle
+# Kria ROS2 workspace
 
-This directory contains the files needed on the Jetson side:
+This directory is the Kria-side ROS2 workspace source. The live Kria
+checkout is `/data/workspaces/ROS2`; this copy is kept in the repository so
+Kria and Jetson code remain clearly separated.
+
+It contains:
 
 - `src/event_camera_msgs`: ROS2 event packet message
-- `src/jetson_evt21_decoder`: EVT21 decoder
-- `src/rvt_live_inference`: RVT ROS2 wrapper and browser overlay publisher
-- `scripts/runtime/run_evt21_decoder.sh`: decoder launcher
-- `scripts/runtime/run_rvt_live.sh`: RVT launcher
-- `scripts/runtime/run_rvt_web_viewer.sh`: browser viewer launcher
+- `src/metavision_driver`: IMX636/EVT21 publisher and configuration
+- `scripts/runtime/kria_ros2_live_env.sh`: runtime environment helper
 
-The official RVT source and checkpoint remain outside this repository in the
-Jetson container data directory.
+The Kria runtime launcher currently lives on the board at
+`/data/workspaces/ROS2/scripts/runtime/run_kria_evt21_driver.sh`.
