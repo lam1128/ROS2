@@ -1,7 +1,7 @@
 /**:
   ros__parameters:
     # Raw transport is intentional: EVT21 is not decoded by event_camera_codecs.
-    encoding: "evt21;height=720;width=1280"
+    encoding: "evt21;endianness=legacy;height=720;width=1280"
     frame_id: "imx636"
     serial: ""
     use_multithreading: true
