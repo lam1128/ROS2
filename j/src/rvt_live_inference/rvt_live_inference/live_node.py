@@ -45,7 +45,9 @@ class RvtLiveNode(Node):
         self.window_start = None
         self.last_seq = None
         self.total_events = 0
-        self.event_canvas = np.zeros((720, 1280, 3), dtype=np.uint8)
+        # Keep a short temporal trail so the sparse event stream is readable
+        # in the browser instead of appearing as isolated single pixels.
+        self.event_canvas = np.full((720, 1280, 3), 6, dtype=np.uint8)
         self.get_logger().info(f'RVT live wrapper ready; checkpoint={self.checkpoint}')
 
     def _load_rvt(self):
@@ -98,10 +100,16 @@ class RvtLiveNode(Node):
         p = self.torch.tensor(self.p, dtype=self.torch.int64, device=self.device)
         t = self.torch.tensor(self.t, dtype=self.torch.int64, device=self.device)
         event_count = len(self.t)
-        self.event_canvas = (self.event_canvas.astype(np.float32) * 0.75).astype(np.uint8)
+        self.event_canvas = np.maximum(
+            (self.event_canvas.astype(np.float32) * 0.92).astype(np.uint8), 4)
         for xx, yy, pol in zip(self.x, self.y, self.p):
             if 0 <= xx < 1280 and 0 <= yy < 720:
-                self.event_canvas[yy, xx] = [255, 40, 40] if pol else [40, 80, 255]
+                # Render each event as a small 2x2 mark. Positive and negative
+                # polarity use distinct bright colors for visual separation.
+                color = np.array([255, 70, 70] if pol else [70, 170, 255], dtype=np.uint8)
+                y0, y1 = max(0, yy - 1), min(720, yy + 2)
+                x0, x1 = max(0, xx - 1), min(1280, xx + 2)
+                self.event_canvas[y0:y1, x0:x1] = color
         self.x, self.y, self.t, self.p = [], [], [], []
         self.window_start = None
         with self.torch.inference_mode():
@@ -127,8 +135,7 @@ class RvtLiveNode(Node):
                                'source_seq': int(source_seq), 'input_event_count': event_count,
                                'inference_ms': elapsed_ms, 'detections': detections})
         self.det_pub.publish(out)
-        # Publish a lightweight grayscale event visualization. The maximum over
-        # the 20 histogram channels is sufficient for the first live milestone.
+        # Publish the accumulated, polarity-colored event visualization.
         image = Image()
         image.header = header
         image.height = 720; image.width = 1280
