@@ -109,7 +109,7 @@ class RvtLiveNode(Node):
         self.event_canvas = (self.event_canvas.astype(np.float32) * 0.75).astype(np.uint8)
         for xx, yy, pol in zip(self.x, self.y, self.p):
             if 0 <= xx < 1280 and 0 <= yy < 720:
-                self.event_canvas[yy, xx] = [255, 40, 40] if pol else [40, 80, 255]
+                self.event_canvas[yy, xx] = [255, 150, 150] if pol else [130, 190, 255]
         self.x, self.y, self.t, self.p = [], [], [], []
         self.window_start = None
         with self.torch.inference_mode():
