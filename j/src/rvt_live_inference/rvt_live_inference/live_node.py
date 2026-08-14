@@ -93,10 +93,18 @@ class RvtLiveNode(Node):
             self.run_window(msg.header, msg.seq)
 
     def run_window(self, header, source_seq):
-        x = self.torch.tensor(self.x, dtype=self.torch.int64, device=self.device)
-        y = self.torch.tensor(self.y, dtype=self.torch.int64, device=self.device)
-        p = self.torch.tensor(self.p, dtype=self.torch.int64, device=self.device)
-        t = self.torch.tensor(self.t, dtype=self.torch.int64, device=self.device)
+        # UDP delivery can expose a timestamp regression when packets are
+        # dropped or arrive out of order. RVT representations require a
+        # monotonic time vector, so sort each bounded window before inference.
+        order = np.argsort(np.asarray(self.t, dtype=np.int64), kind='stable')
+        x_np = np.asarray(self.x, dtype=np.int64)[order]
+        y_np = np.asarray(self.y, dtype=np.int64)[order]
+        p_np = np.asarray(self.p, dtype=np.int64)[order]
+        t_np = np.asarray(self.t, dtype=np.int64)[order]
+        x = self.torch.tensor(x_np, dtype=self.torch.int64, device=self.device)
+        y = self.torch.tensor(y_np, dtype=self.torch.int64, device=self.device)
+        p = self.torch.tensor(p_np, dtype=self.torch.int64, device=self.device)
+        t = self.torch.tensor(t_np, dtype=self.torch.int64, device=self.device)
         event_count = len(self.t)
         self.event_canvas = (self.event_canvas.astype(np.float32) * 0.75).astype(np.uint8)
         for xx, yy, pol in zip(self.x, self.y, self.p):
